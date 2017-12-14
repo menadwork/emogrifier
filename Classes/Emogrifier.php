@@ -1,5 +1,8 @@
 <?php
 
+
+use voku\helper\HtmlDomParser;
+
 namespace Pelago;
 
 /**
@@ -289,7 +292,7 @@ class Emogrifier
      */
     public function emogrify()
     {
-        return $this->createAndProcessXmlDocument()->saveHTML();
+        return $this->createAndProcessXmlDocument()->html();
     }
 
     /**
@@ -313,7 +316,7 @@ class Emogrifier
     /**
      * Creates an XML document from $this->html and emogrifies ist.
      *
-     * @return \DOMDocument
+     * @return HtmlDomParser
      *
      * @throws \BadMethodCallException
      */
@@ -324,8 +327,8 @@ class Emogrifier
         }
 
         $xmlDocument = $this->createRawXmlDocument();
-        $this->ensureExistenceOfBodyElement($xmlDocument);
-        $this->process($xmlDocument);
+        $this->ensureExistenceOfBodyElement($xmlDocument->getDocument());
+        $this->process($xmlDocument->getDocument());
 
         return $xmlDocument;
     }
@@ -1251,11 +1254,12 @@ class Emogrifier
     /**
      * Creates a DOMDocument instance with the current HTML.
      *
-     * @return \DOMDocument
+     * @return HtmlDomParser
      */
     private function createRawXmlDocument()
     {
-        $xmlDocument = new \DOMDocument;
+        $htmlDomParser = HtmlDomParser::str_get_html($this->getUnifiedHtml());
+        $xmlDocument = $htmlDomParser->getDocument();
         $xmlDocument->encoding = 'UTF-8';
         $xmlDocument->strictErrorChecking = false;
         $xmlDocument->formatOutput = true;
@@ -1265,7 +1269,7 @@ class Emogrifier
         libxml_use_internal_errors($libXmlState);
         $xmlDocument->normalizeDocument();
 
-        return $xmlDocument;
+        return $htmlDomParser;
     }
 
     /**
