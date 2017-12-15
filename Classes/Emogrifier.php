@@ -307,8 +307,8 @@ class Emogrifier
      */
     public function emogrifyBodyContent()
     {
-        $xmlDocument = $this->createAndProcessXmlDocument();
-        $bodyNodeHtml = $xmlDocument->saveHTML($this->getBodyElement($xmlDocument));
+        $htmlDomParser = $this->createAndProcessXmlDocument();
+        $bodyNodeHtml = $htmlDomParser->html($this->getBodyElement($htmlDomParser->getDocument()));
 
         return str_replace(['<body>', '</body>'], '', $bodyNodeHtml);
     }
