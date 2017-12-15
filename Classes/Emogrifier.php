@@ -1,9 +1,9 @@
 <?php
 
+namespace Pelago;
 
 use voku\helper\HtmlDomParser;
 
-namespace Pelago;
 
 /**
  * This class provides functions for converting CSS styles into inline style attributes in your HTML code.
